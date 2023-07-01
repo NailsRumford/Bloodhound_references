@@ -6,7 +6,7 @@ Bloodhound_references - это программа для сортировки п
 
 1. Клонируйте репозиторий:
 
-    git clone https://github.com/your-username/image-sorter.git` 
+    git clone git@github.com:NailsRumford/Bloodhound_references.git` 
 
 
 2.  Перейдите в папку с проектом:
