@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Проверка, что передан аргумент командной строки
+if [ $# -ne 1 ]; then
+    echo "Usage: ./image_sorter <folder_path>"
+    exit 1
+fi
+
+# Проверка, что папка существует
+if [ ! -d "$1" ]; then
+    echo "Invalid folder path: $1"
+    exit 1
+fi
+
+# Запуск программы с переданным путем к папке
+python main.py "$1"
