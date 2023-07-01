@@ -1,5 +1,6 @@
 import os
 from typing import List
+import logging
 
 class ImageFinder:
     """
@@ -22,14 +23,14 @@ class ImageFinder:
         Returns:
             List[str]: A list of paths to the found images.
         """
-        images = []
-
         try:
-            for root, dirs, files in os.walk(self.root_folder):
-                for file in files:
-                    if file.lower().endswith('.jpg'):
-                        images.append(os.path.join(root, file))
-        except (OSError, IOError) as e:
-            print(f"Error occurred while searching for images: {e}")
-
-        return images
+            images = [
+                os.path.join(root, file)
+                for root, dirs, files in os.walk(self.root_folder)
+                for file in files
+                if file.lower().endswith('.jpg')
+            ]
+            return images
+        except Exception as e:
+            logging.error(f"Error occurred while searching for images: {e}")
+            return []
