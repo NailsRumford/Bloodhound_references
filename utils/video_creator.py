@@ -1,6 +1,7 @@
 import os
 import subprocess
 from typing import List, Tuple
+import logging
 
 class VideoCreator:
     """
@@ -23,13 +24,31 @@ class VideoCreator:
             output_path = os.path.join(output_folder, output_filename)
             start_number = frames[0][0]
             input_pattern = os.path.join(folder_path, f"{name}_%{padding}d.jpg")
-            ffmpeg_command = f"ffmpeg -framerate 30 -start_number {start_number} -i {input_pattern} -c:v mjpeg -q:v 2 -y {output_path}"
+            ffmpeg_command = VideoCreator._build_ffmpeg_command(input_pattern, output_path, start_number)
 
             try:
                 subprocess.run(ffmpeg_command, shell=True, check=True)
-                print(f"Created video: {output_path}")
-            except subprocess.CalledProcessError as e:
-                print(f"Error creating video: {output_path}")
-                print(f"Command: {e.cmd}")
-                print(f"Return code: {e.returncode}")
-                print(f"Output: {e.output}")
+                logging.info(f"Created video: {output_path}")
+            except Exception as e:
+                logging.error(f"Error creating video: {output_path}")
+                logging.error(f"Command: {ffmpeg_command}")
+                logging.error(f"Error message: {str(e)}")
+
+    @staticmethod
+    def _build_ffmpeg_command(input_pattern: str, output_path: str, start_number: int) -> str:
+        """
+        Build the FFmpeg command for creating a video.
+
+        Args:
+            input_pattern (str): The input image pattern.
+            output_path (str): The output video path.
+            start_number (int): The starting frame number.
+
+        Returns:
+            str: The FFmpeg command.
+        """
+        framerate = 30
+        codec = "mjpeg"
+        quality = 2
+
+        return f"ffmpeg -framerate {framerate} -start_number {start_number} -i {input_pattern} -c:v {codec} -q:v {quality} -y {output_path}"
